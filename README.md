@@ -5,14 +5,6 @@
 **Node Version Manager (nvm):** 0.40.1  
 **Node.js**: v22.12.0 LTS
 
-## Branching name policy
-
-- `master`: This is the production branch.
-- `feature/<short_description>`: Development of new features.
-- `bugfix/<short_description>` : Development of a bugfix.
-- `chore/<short_description>` : Miscellaneous tasks such as updates, configurations, or code improvements that don't fit into the other categories.
-- `test/<short_description>` : Development of tests.
-
 ## Installation
 
 ### For macOS
