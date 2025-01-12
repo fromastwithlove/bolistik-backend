@@ -13,6 +13,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.getOrThrow<string>('database.username'),
       password: this.configService.getOrThrow<string>('database.password'),
       database: this.configService.getOrThrow<string>('database.name'),
+      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     };
   }
 }
