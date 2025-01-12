@@ -1,30 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserDto } from 'src/users/dto/user.dto';
+import { UsersService } from 'src/users/users.service';
 import { RegisterRequestDto } from './dto/register-request.dto';
 
 @Injectable()
 export class AuthService {
-  constructor() {}
-
-  private readonly users: UserDto[] = [];
+  constructor(private readonly usersService: UsersService) {}
 
   async register(registerRequestDto: RegisterRequestDto): Promise<UserDto> {
-    // Check if the user already exists (based on email in this case)
-    const existingUser = this.users.find((user) => user.email === registerRequestDto.email);
-    if (existingUser) {
-      throw new HttpException('User already exists', HttpStatus.CONFLICT);
-    }
-
-    // Otherwise, create a new user
-    const newUser: UserDto = {
-      id: this.users.length + 1,
+    return this.usersService.create({
       firstName: registerRequestDto.firstName,
       lastName: registerRequestDto.lastName,
       email: registerRequestDto.email,
-    };
-
-    // Store the new user in our "mock database"
-    this.users.push(newUser);
-    return newUser;
+    });
   }
 }
