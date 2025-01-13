@@ -1,5 +1,5 @@
 import { Controller, Get, HttpCode, HttpStatus, NotFoundException, Param } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
@@ -10,9 +10,14 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ description: 'User found', type: UserDto })
-  @ApiNotFoundResponse({ description: 'User not found' })
-  @ApiParam({ name: 'id', type: Number, required: true, description: 'Unique id of the user' })
+  @ApiOperation({
+    summary: 'Get user by ID',
+    description:
+      'Fetches a user by their unique identifier. Returns the user details if found, otherwise throws a not found exception.',
+  })
+  @ApiOkResponse({ description: 'User found and returned successfully', type: UserDto })
+  @ApiNotFoundResponse({ description: 'User with the specified ID was not found' })
+  @ApiParam({ name: 'id', type: Number, required: true, description: 'Unique identifier of the user' })
   async findOne(@Param('id') id: number): Promise<UserDto> {
     const user = await this.usersService.findOne(id);
     if (!user) {

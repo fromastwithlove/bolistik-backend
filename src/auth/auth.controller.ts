@@ -17,7 +17,8 @@ export class AuthController {
   @Post('/register')
   @ApiOperation({
     summary: 'Register a new user',
-    description: 'This endpoint allows a user to register with their details and returns the created user information.',
+    description:
+      'This endpoint allows a user to register with their details and returns the `userId` and `accessToken`. It checks if the user already exists and throws a conflict error if so.',
   })
   @ApiResponse({
     status: 201,
