@@ -1,13 +1,17 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserDto } from 'src/users/dto/user.dto';
+import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { RegisterRequestDto } from './dto/register-request.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 
 @ApiTags('Authentication')
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
@@ -18,7 +22,7 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: 'User successfully registered.',
-    type: UserDto,
+    type: RegisterResponseDto,
   })
   @ApiResponse({
     status: 400,
@@ -28,7 +32,10 @@ export class AuthController {
     status: 409,
     description: 'Conflict, user already exists.',
   })
-  register(@Body() registerRequestDto: RegisterRequestDto): Promise<UserDto> {
+  register(@Body() registerRequestDto: RegisterRequestDto): Promise<RegisterResponseDto> {
+    const user = this.usersService.findOneByEmail(registerRequestDto.email);
+    if (!user) throw new HttpException('User already exists', HttpStatus.CONFLICT);
+
     return this.authService.register(registerRequestDto);
   }
 }

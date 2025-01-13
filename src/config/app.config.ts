@@ -1,10 +1,11 @@
 import { registerAs } from '@nestjs/config';
-import { IsEnum, IsInt, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsString, Max, Min } from 'class-validator';
 import validateConfig from 'src/utils/validate-config';
 
 type AppConfig = {
   nodeEnv: Environment;
   port: number;
+  jwtSecret: string;
 };
 
 enum Environment {
@@ -21,6 +22,9 @@ class EnvironmentVariablesValidator {
   @Min(0)
   @Max(65535)
   APP_PORT: number;
+
+  @IsString()
+  JWT_SECRET: string;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -29,5 +33,6 @@ export default registerAs<AppConfig>('app', () => {
   return {
     nodeEnv: process.env.NODE_ENV as Environment,
     port: parseInt(process.env.APP_PORT, 10),
+    jwtSecret: process.env.JWT_SECRET,
   };
 });
