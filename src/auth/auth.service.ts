@@ -15,30 +15,32 @@ export class AuthService {
   ) {}
 
   /**
-   * Registers a new user and generates an authentication token.
-   * @param registerRequestDto - The data needed to register the user.
-   * @returns The JWT access token and user ID.
+   * Registers a new user and generates a JWT access token.
+   *
+   * This method handles the user registration process, saving the user details to the database,
+   * and generating a JWT token for authentication. It logs key actions (e.g., user creation and token generation)
+   * at the debug level for detailed tracking and development purposes.
+   *
+   * @param registerRequestDto - The data for the user to be registered, including first name, last name, and email.
+   * @returns An object containing the generated JWT access token and the user ID.
    */
   async register(registerRequestDto: RegisterRequestDto): Promise<RegisterResponseDto> {
-    // Create and save the new user
     const savedUser = await this.usersService.create({
       firstName: registerRequestDto.firstName,
       lastName: registerRequestDto.lastName,
       email: registerRequestDto.email,
     });
-    // Log user creation details for debugging purposes
-    console.log(`User registered with email: ${savedUser.email}`);
 
-    // Prepare the JWT payload
+    this.logger.debug(`User successfully registered with email: ${savedUser.email}`);
+
     const payload: JwtPayloadType = {
       id: savedUser.id,
       email: savedUser.email,
     };
 
-    // Generate JWT access token
     const accessToken = await this.jwtService.signAsync(payload);
-    // Log token generation for verification
-    console.log(`JWT token generated for user ID: ${savedUser.id}`);
+
+    this.logger.debug(`JWT access token successfully generated for user ID: ${savedUser.id}`);
 
     return {
       accessToken,
