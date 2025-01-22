@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AuthModule } from '../src/auth/auth.module';
 import { AuthService } from '../src/auth/auth.service';
-import { RegisterRequestDto } from '../src/auth/dto/register-request.dto';
+import { RegisterRequestDto } from '../src/auth/dto/apple-credentials-request.dto';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;

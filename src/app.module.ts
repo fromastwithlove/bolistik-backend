@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import appConfig from './config/app.config';
+import appleConfig from './config/apple.config';
 import databaseConfig from './config/database.config';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { UsersModule } from './users/users.module';
@@ -10,7 +11,7 @@ import { UsersModule } from './users/users.module';
 // Configuration module
 const ConfigurationModule = ConfigModule.forRoot({
   isGlobal: true,
-  load: [appConfig, databaseConfig],
+  load: [appConfig, appleConfig, databaseConfig],
   envFilePath: ['.env'],
 });
 
